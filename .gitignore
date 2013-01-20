@@ -1,4 +1,4 @@
 settings.py
 venv
-.swp
-.pyc
+*.swp
+*.pyc

@@ -1,0 +1,9 @@
+DB_URL = 'CONNECTION_STRING'
+clientid = "FOURSQUARE_APP_CLIENT_ID"
+secret = "FOURSQURE_APP_CLIENT_SECRET"
+push_secret = "FOURSQUARE_APP_PUSH_SECRET"
+API_VERSION = '20130120'
+REPLY_URL = "https://api.foursquare.com/v2/checkins/{checkin_id}/reply"
+AUTHENTICATE_URL = "https://foursquare.com/oauth2/authenticate?client_id={clientid}&response_type=code&redirect_uri=http://ukuncooked.co.uk/callback".format(clientid=clientid)
+AUTHORIZE_URL = "https://foursquare.com/oauth2/access_token?client_id={client_id}&client_secret={secret}&grant_type=authorization_code&redirect_uri=http://ukuncooked.co.uk/callback&code={code}"
+SELF_URL = "https://api.foursquare.com/v2/users/self"
