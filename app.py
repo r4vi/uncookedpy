@@ -4,13 +4,10 @@ import requests, json
 from fsa import get_match
 from rq import Connection, Queue
 from db import User, db_session
+from settings import clientid, secret, push_secret, API_VERSION, REPLY_URL, AUTHENTICATE_URL, AUTHORIZE_URL, SELF_URL
+
 app = Flask(__name__)
 
-clientid = "3V0XVFLR0MRPWHMMQZWJQ4CZVNOFBMCTNNREU4ECKVM3ACCY"
-secret = "5CG1UWJD14PBK0MZT02QUV2K0P5PFIQIICFUHA4KRTT4UMMH"
-push_secret = "KB1K2W4RW5LK2A2VYOTPSIDRXS2UNIIVSY3VPZ1V0SFD2WWS"
-API_VERSION = '20130120'
-REPLY_URL = "https://api.foursquare.com/v2/checkins/{checkin_id}/reply"
 
 def get_token(foursquare_id):
     u = User.query.filter(User.foursquare_id == foursquare_id).first()
@@ -32,7 +29,7 @@ def reply(checkin_id, lat, lng, foursquare_id, name=None):
 
 @app.route('/')
 def index():
-    return '<a href=\"https://foursquare.com/oauth2/authenticate?client_id={clientid}&response_type=code&redirect_uri=http://ukuncooked.co.uk/callback\">go go go</a>'.format(clientid=clientid)
+    return '<a href="{AUTHENTICATE_URL}">go go go</a>'.format(AUTHENTICATE_URL=AUTHENTICATE_URL)
 
 @app.route('/checkin', methods=['GET','POST'])
 def checkin():    
@@ -47,12 +44,12 @@ def checkin():
             lat = venue.get('location',{}).get('lat')
             lng = venue.get('location',{}).get('lng')
             if all(map(bool,[name,lat,lng, foursquare_id])):
-                reply(checkin_id, lat, lng, foursquare_id, name)
-        
+                try:
+                    reply(checkin_id, lat, lng, foursquare_id, name)
+                except:
+                    pass
     return 'OK'
 
-AUTHORIZE_URL = "https://foursquare.com/oauth2/access_token?client_id={client_id}&client_secret={secret}&grant_type=authorization_code&redirect_uri=http://ukuncooked.co.uk/callback&code={code}"
-SELF_URL = "https://api.foursquare.com/v2/users/self"
 @app.route('/callback', methods=['GET','POST'])
 def callback():
     code=request.args.get('code')

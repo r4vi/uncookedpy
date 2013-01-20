@@ -47,6 +47,8 @@ def get_match(lat, lng, name=None):
                     ecoll = ecoll.get('EstablishmentDetail')
                     if not name:
                         return _simple_result(ecoll[0])
+                    elif count == 1:
+                        return _simple_result(ecoll)
                     else:
                         ecoll = sorted([_simple_result(x, name) for x in ecoll], key=itemgetter('perc_match'), reverse=True)
                         ecoll = [x for x in ecoll if x['perc_match'] > 0.8]
